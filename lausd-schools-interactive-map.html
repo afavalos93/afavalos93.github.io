@@ -1,0 +1,89 @@
+<html>
+    <head>
+    
+    <meta name="tags" content="LAUSD, schools, maps, geojson" />
+        <meta name="date" content="2016-09-08 16:30" />
+        <meta name="modified" content="2016-09-08 16:30" />
+        <meta name="category" content="Projects" />
+        <meta name="author" content="Andres Avalos" />
+        <meta name="javascripts" content="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js, leaflet.ajax.min.js" />
+        <meta name="stylesheets" content="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
+        <!--<meta name="summary" content="Map displaying LAUSD schools" /> -->
+      
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
+      <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
+        <script src="leaflet.ajax.min.js"></script>
+        
+        
+
+        <title>LAUSD Schools Interactive Map</title>
+       
+
+  
+        <style>
+        #mapid { height: 500px;
+             width: 800px; }
+
+        body { font-family: "courier";
+            color: white;
+            background-color: #636363;
+            font-size: 20;}
+        </style>
+
+    </head>
+    <body>
+        
+         <center>
+         Schools in Los Angeles Unified School District
+         <br>
+         <br>
+         <div id="mapid"></div>
+         </center>
+
+
+         <script> 
+          var myStyle = {
+            "color": "#c51b8a",
+            "weight": 0.5,
+            "opacity": 0.90,
+            "stroke": true
+        };
+
+        var mouseStyle = {
+          "color": "#c51b8a",
+            "weight": 2,
+            "opacity": 0.95,
+            "stroke": true
+        }
+
+      function onEachFeature(feature, layer) {
+          // does this feature have a property named popupContent?
+          if (feature.properties) {
+              layer.bindPopup('<b>' + feature.properties.LABEL + '</b>' + 
+                '<br><b>Address</b>:'+ feature.properties.ADDRESS +
+                '<br><b>Description</b>:' + feature.properties.MAP_DESC
+                );
+          }
+          layer.on('mouseover', function (e) {
+            this.openPopup();
+            layer.setStyle(mouseStyle);
+          });
+          layer.on('mouseout', function (e) {
+            this.closePopup();
+            layer.setStyle(myStyle);
+          });
+      }
+
+
+          var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>' }); 
+          var map = L.map('mapid', { scrollWheelZoom: true, center: [34.1826, -118.4397], zoom: 11}); map.addLayer(layer);
+          var geojsonLayer = new L.GeoJSON.AJAX("lausd.geojson", {
+            onEachFeature:onEachFeature,
+            style: myStyle});
+          geojsonLayer.addTo(map);
+
+    </script>
+
+    </body>
+  
+</html>
