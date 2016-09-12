@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Andres' Data Blog</title><link href="http://afavalos93.github.io/" rel="alternate"></link><link href="http://afavalos93.github.io/feeds/all.atom.xml" rel="self"></link><id>http://afavalos93.github.io/</id><updated>2016-09-08T16:30:00-07:00</updated><entry><title>LAUSD Schools Interactive Map</title><link href="http://afavalos93.github.io/lausd-schools-interactive-map.html" rel="alternate"></link><published>2016-09-08T16:30:00-07:00</published><author><name>Andres Avalos</name></author><id>tag:afavalos93.github.io,2016-09-08:lausd-schools-interactive-map.html</id><summary type="html">
+        
+         &lt;center&gt;
+         &lt;div style="background-color:#2c3e50;padding-bottom:15px;padding-top:15px;font-size:35;"&gt;
+         Schools in Los Angeles Unified School District
+         &lt;/div&gt;
+         
+        
+         &lt;div class="custom-popup" id="mapid"&gt;&lt;/div&gt;
+         &lt;div style="padding-top:15px;padding-bottom:10px"&gt;
+         Map data provided by LA Times' &lt;a href="https://github.com/datadesk/"&gt;Data Desk&lt;/a&gt;. Available &lt;a href="https://github.com/datadesk/lausd-school-campus-polygons"&gt;here&lt;/a&gt;.
+         &lt;/div&gt;
+         &lt;/center&gt;
+
+
+         &lt;script&gt; 
+        	var myStyle = {
+		        "color": "#c51b8a",
+		        "weight": 0.5,
+		        "opacity": 0.90,
+		        "stroke": true
+		    };
+
+		    var mouseStyle = {
+		    	"color": "#c51b8a",
+		        "weight": 2,
+		        "opacity": 0.95,
+		        "stroke": true
+		    }
+
+			function onEachFeature(feature, layer) {
+			    // does this feature have a property named popupContent?
+			    if (feature.properties) {
+
+			    	if (feature.properties.CONFIG != null) {
+				        layer.bindPopup('&lt;b&gt;' + feature.properties.LABEL + '&lt;/b&gt;&lt;br&gt;' + 
+				        	'&lt;br&gt;&lt;b&gt;Address&lt;/b&gt;: '+ feature.properties.ADDRESS +
+				        	'&lt;br&gt;&lt;b&gt;City&lt;/b&gt;: '+ feature.properties.CITY +
+				        	'&lt;br&gt;&lt;b&gt;Grades&lt;/b&gt;: ' + feature.properties.CONFIG +
+				        	'&lt;br&gt;&lt;b&gt;Description&lt;/b&gt;: ' + feature.properties.MAP_DESC
+				        	);
+			    	}
+			    	else {
+			    		layer.bindPopup('&lt;b&gt;' + feature.properties.LABEL + '&lt;/b&gt;&lt;br&gt;' + 
+				        	'&lt;br&gt;&lt;b&gt;Address&lt;/b&gt;: '+ feature.properties.ADDRESS +
+				        	'&lt;br&gt;&lt;b&gt;City&lt;/b&gt;: '+ feature.properties.CITY +
+				        	'&lt;br&gt;&lt;b&gt;Grades&lt;/b&gt;: ' + 'N/A' +
+				        	'&lt;br&gt;&lt;b&gt;Description&lt;/b&gt;: ' + feature.properties.MAP_DESC
+				        	);
+			    	}
+			    }
+			    layer.on('mouseover', function (e) {
+			    	this.openPopup();
+			    	layer.setStyle(mouseStyle);
+			    });
+			    layer.on('mouseout', function (e) {
+			    	this.closePopup();
+			    	layer.setStyle(myStyle);
+			    });
+			}
+
+
+        	var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', { attribution: '&amp;copy; &lt;a href="http://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt; contributors, &amp;copy; &lt;a href="https://carto.com/attributions"&gt;CARTO&lt;/a&gt;' }); 
+        	var map = L.map('mapid', { scrollWheelZoom: true, center: [34.1126, -118.3997], zoom: 11}); map.addLayer(layer);
+        	var geojsonLayer = new L.GeoJSON.AJAX("lausd.geojson", {
+        		onEachFeature:onEachFeature,
+        		style: myStyle});
+        	geojsonLayer.addTo(map);
+
+		&lt;/script&gt;
+
+    </summary><category term="LAUSD"></category><category term="schools"></category><category term="maps"></category><category term="geojson"></category></entry></feed>

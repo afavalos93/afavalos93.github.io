@@ -1,85 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8" />
+        <title>A Pelican Blog - Andres Avalos</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
 
-    <link rel="stylesheet" type="text/css" href="/theme/stylesheet/style.min.css">
-
-  <link rel="stylesheet" type="text/css" href="/theme/pygments/github.min.css">
-  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/font-awesome.min.css">
-
-
-
-
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="" />
-
-
-    <meta name="author" content="Andres Avalos" />
-    <meta name="description" content="Andres Data Blog" />
-<meta property="og:site_name" content="Andres' Data Blog"/>
-<meta property="og:type" content="blog"/>
-<meta property="og:title" content="Andres' Data Blog"/>
-<meta property="og:description" content="Andres Data Blog"/>
-<meta property="og:locale" content="en_US"/>
-<meta property="og:url" content=""/>
-
-  <title>Andres' Data Blog &ndash; Posts by: Andres Avalos</title>
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
 </head>
-<body>
-  <aside>
-    <div>
-      <a href="">
-        <img src="/theme/img/profile.png" alt="andres avalos" title="andres avalos">
-      </a>
-      <h1><a href="">andres avalos</a></h1>
-<p>Data Scientist</p>      <ul class="social">
-        <li><a class="sc-linkedin" href="https://www.linkedin.com/in/andresavalos93" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-        <li><a class="sc-github" href="https://github.com/afavalos93" target="_blank"><i class="fa fa-github"></i></a></li>
-      </ul>
-    </div>
-  </aside>
-  <main>
 
-<article>
-  <header>
-    <h2><a href="/lausd-schools-interactive-map.html#lausd-schools-interactive-map">LAUSD Schools Interactive Map</a></h2>
-    <p>
-      Posted on Thu 08 September 2016 in <a href="/category/projects.html">Projects</a>
-      &#8226; Tagged with
-      <a href="/tag/lausd.html">LAUSD</a>,      <a href="/tag/schools.html">schools</a>,      <a href="/tag/maps.html">maps</a>,      <a href="/tag/geojson.html">geojson</a>    </p>
-  </header>
-  <div>
-      A map of schools with information on grade-levels and education programs.
-      <a class="btn" href="/lausd-schools-interactive-map.html#lausd-schools-interactive-map">Continue reading</a>
-  </div>
-</article>
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog </a></h1>
+                <nav><ul>
+                    <li><a href="/category/projects.html">Projects</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
 
-  <div class="pagination">
-  </div>
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/lausd-schools-interactive-map.html">LAUSD Schools Interactive Map</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2016-09-08T16:30:00+00:00">
+                Published: Thu 08 September 2016
+        </abbr>
+		<br />
+        <abbr class="modified" title="2016-09-08T16:30:00+00:00">
+                Updated: Thu 08 September 2016
+        </abbr>
 
-    <footer>
-        <p>&copy; Andres Avalos 2016</p>
-<p>Built using <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a></p>    </footer>
-  </main>
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/andres-avalos.html">Andres Avalos</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+<p>tags: <a href="/tag/lausd.html">LAUSD</a> <a href="/tag/schools.html">schools</a> <a href="/tag/maps.html">maps</a> <a href="/tag/geojson.html">geojson</a> </p>
+</footer><!-- /.post-info -->
+        
+         <center>
+         <div style="background-color:#2c3e50;padding-bottom:15px;padding-top:15px;font-size:35;">
+         Schools in Los Angeles Unified School District
+         </div>
+         
+        
+         <div class="custom-popup" id="mapid"></div>
+         <div style="padding-top:15px;padding-bottom:10px">
+         Map data provided by LA Times' <a href="https://github.com/datadesk/">Data Desk</a>. Available <a href="https://github.com/datadesk/lausd-school-campus-polygons">here</a>.
+         </div>
+         </center>
 
 
+         <script> 
+        	var myStyle = {
+		        "color": "#c51b8a",
+		        "weight": 0.5,
+		        "opacity": 0.90,
+		        "stroke": true
+		    };
+
+		    var mouseStyle = {
+		    	"color": "#c51b8a",
+		        "weight": 2,
+		        "opacity": 0.95,
+		        "stroke": true
+		    }
+
+			function onEachFeature(feature, layer) {
+			    // does this feature have a property named popupContent?
+			    if (feature.properties) {
+
+			    	if (feature.properties.CONFIG != null) {
+				        layer.bindPopup('<b>' + feature.properties.LABEL + '</b><br>' + 
+				        	'<br><b>Address</b>: '+ feature.properties.ADDRESS +
+				        	'<br><b>City</b>: '+ feature.properties.CITY +
+				        	'<br><b>Grades</b>: ' + feature.properties.CONFIG +
+				        	'<br><b>Description</b>: ' + feature.properties.MAP_DESC
+				        	);
+			    	}
+			    	else {
+			    		layer.bindPopup('<b>' + feature.properties.LABEL + '</b><br>' + 
+				        	'<br><b>Address</b>: '+ feature.properties.ADDRESS +
+				        	'<br><b>City</b>: '+ feature.properties.CITY +
+				        	'<br><b>Grades</b>: ' + 'N/A' +
+				        	'<br><b>Description</b>: ' + feature.properties.MAP_DESC
+				        	);
+			    	}
+			    }
+			    layer.on('mouseover', function (e) {
+			    	this.openPopup();
+			    	layer.setStyle(mouseStyle);
+			    });
+			    layer.on('mouseout', function (e) {
+			    	this.closePopup();
+			    	layer.setStyle(myStyle);
+			    });
+			}
 
 
+        	var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>' }); 
+        	var map = L.map('mapid', { scrollWheelZoom: true, center: [34.1126, -118.3997], zoom: 11}); map.addLayer(layer);
+        	var geojsonLayer = new L.GeoJSON.AJAX("lausd.geojson", {
+        		onEachFeature:onEachFeature,
+        		style: myStyle});
+        	geojsonLayer.addTo(map);
 
-<script type="application/ld+json">
-{
-  "@context" : "http://schema.org",
-  "@type" : "Blog",
-  "name": " Andres' Data Blog ",
-  "url" : "",
-  "image": "",
-  "description": "Andres Data Blog"
-}
-</script>
+		</script>
+
+                    </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
 </body>
 </html>
