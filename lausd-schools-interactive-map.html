@@ -1,7 +1,7 @@
 <html>
     <head>
-    	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
-    	<script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
+      <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
         <script src="leaflet.ajax.min.js"></script>
         
 
@@ -15,24 +15,24 @@
 
         <style>
         #mapid { height: 78%;
-        		 width: 100%; }
+             width: 100%; }
 
         body { font-family: "Arial";
-        		color: white;
-        		background-color: #636363;
-        		padding-top: 0px;
-        		margin:0;
-        	}
+            color: white;
+            background-color: #636363;
+            padding-top: 0px;
+            margin:0;
+          }
        .custom-popup .leaflet-popup-content-wrapper {
-				background:#2c3e50;
-				color:#fff;
-				font-size:16px;
-				line-height:24px;
-  			}
-  		a:link    {color:pink; background-color:transparent; text-decoration:none}
-		a:visited {color:pink; background-color:transparent; text-decoration:none}
-		a:hover   {color:orange; background-color:transparent; text-decoration:underline}
-		a:active  {color:pink; background-color:transparent; text-decoration:underline}
+        background:#2c3e50;
+        color:#fff;
+        font-size:16px;
+        line-height:24px;
+        }
+      a:link    {color:pink; background-color:transparent; text-decoration:none}
+    a:visited {color:pink; background-color:transparent; text-decoration:none}
+    a:hover   {color:orange; background-color:transparent; text-decoration:underline}
+    a:active  {color:pink; background-color:transparent; text-decoration:underline}
 
 
         </style>
@@ -54,60 +54,60 @@
 
 
          <script> 
-        	var myStyle = {
-		        "color": "#c51b8a",
-		        "weight": 0.5,
-		        "opacity": 0.90,
-		        "stroke": true
-		    };
+          var myStyle = {
+            "color": "#c51b8a",
+            "weight": 0.5,
+            "opacity": 0.90,
+            "stroke": true
+        };
 
-		    var mouseStyle = {
-		    	"color": "#c51b8a",
-		        "weight": 2,
-		        "opacity": 0.95,
-		        "stroke": true
-		    }
+        var mouseStyle = {
+          "color": "#c51b8a",
+            "weight": 2,
+            "opacity": 0.95,
+            "stroke": true
+        }
 
-			function onEachFeature(feature, layer) {
-			    // does this feature have a property named popupContent?
-			    if (feature.properties) {
+      function onEachFeature(feature, layer) {
+          // does this feature have a property named popupContent?
+          if (feature.properties) {
 
-			    	if (feature.properties.CONFIG != null) {
-				        layer.bindPopup('<b>' + feature.properties.LABEL + '</b><br>' + 
-				        	'<br><b>Address</b>: '+ feature.properties.ADDRESS +
-				        	'<br><b>City</b>: '+ feature.properties.CITY +
-				        	'<br><b>Grades</b>: ' + feature.properties.CONFIG +
-				        	'<br><b>Description</b>: ' + feature.properties.MAP_DESC, {autoPan : false}
-				        	);
-			    	}
-			    	else {
-			    		layer.bindPopup('<b>' + feature.properties.LABEL + '</b><br>' + 
-				        	'<br><b>Address</b>: '+ feature.properties.ADDRESS +
-				        	'<br><b>City</b>: '+ feature.properties.CITY +
-				        	'<br><b>Grades</b>: ' + 'N/A' +
-				        	'<br><b>Description</b>: ' + feature.properties.MAP_DESC, {autoPan : false}
-				        	);
-			    	}
-			    }
-			    layer.on('mouseover', function (e) {
-			    	this.openPopup();
-			    	layer.setStyle(mouseStyle);
-			    });
-			    layer.on('mouseout', function (e) {
-			    	this.closePopup();
-			    	layer.setStyle(myStyle);
-			    });
-			}
+            if (feature.properties.CONFIG != null) {
+                layer.bindPopup('<b>' + feature.properties.LABEL + '</b><br>' + 
+                  '<br><b>Address</b>: '+ feature.properties.ADDRESS +
+                  '<br><b>City</b>: '+ feature.properties.CITY +
+                  '<br><b>Grades</b>: ' + feature.properties.CONFIG +
+                  '<br><b>Description</b>: ' + feature.properties.MAP_DESC, { autoPan: false}
+                  );
+            }
+            else {
+              layer.bindPopup('<b>' + feature.properties.LABEL + '</b><br>' + 
+                  '<br><b>Address</b>: '+ feature.properties.ADDRESS +
+                  '<br><b>City</b>: '+ feature.properties.CITY +
+                  '<br><b>Grades</b>: ' + 'N/A' +
+                  '<br><b>Description</b>: ' + feature.properties.MAP_DESC, { autoPan: false}
+                  );
+            }
+          }
+          layer.on('mouseover', function (e) {
+            this.openPopup();
+            layer.setStyle(mouseStyle);
+          });
+          layer.on('mouseout', function (e) {
+            this.closePopup();
+            layer.setStyle(myStyle);
+          });
+      }
 
 
-        	var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>' }); 
-        	var map = L.map('mapid', { scrollWheelZoom: true, center: [34.1126, -118.3997], zoom: 11}); map.addLayer(layer);
-        	var geojsonLayer = new L.GeoJSON.AJAX("lausd.geojson", {
-        		onEachFeature:onEachFeature,
-        		style: myStyle});
-        	geojsonLayer.addTo(map);
+          var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>' }); 
+          var map = L.map('mapid', { scrollWheelZoom: true, center: [34.1126, -118.3997], zoom: 11}); map.addLayer(layer);
+          var geojsonLayer = new L.GeoJSON.AJAX("lausd.geojson", {
+            onEachFeature:onEachFeature,
+            style: myStyle});
+          geojsonLayer.addTo(map);
 
-		</script>
+    </script>
 
     </body>
 </html>
