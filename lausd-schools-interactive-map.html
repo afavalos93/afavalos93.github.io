@@ -12,7 +12,7 @@
         <meta name="category" content="Projects" />
         <meta name="author" content="Andres Avalos" />
         <meta name="summary" content="A map of schools with information on grade-levels and education programs." />
-
+		<meta charset="utf-8"/> 
         <style>
         #mapid { height: 72%;
         		 width: 100%; }
@@ -31,10 +31,12 @@
   			}
 
   		.button {
-			    background-color: #1CAF80; /* Green */
-			    border: none;
-			    border-radius: 7px;
-			    color: white;
+			    background-color: white; /* Green */
+			    border-style:solid;
+
+			    border-radius: 5px;
+			    box-shadow: 0 1px #666;
+			    color: #666;
 			    padding: 2px 5px;
 			    text-align: center;
 			    text-decoration: none;
@@ -51,7 +53,7 @@
 
 
 		.button:active {
-				box-shadow: 0 5px #666;
+				box-shadow: 0 1px #666;
 				transform: translateY(2px);
 		}
 
@@ -78,10 +80,10 @@
          <button class="button" onclick="setElementarySchool(settings)">Elementary Schools</button>
          <button class="button" onclick="setMiddleSchool(settings)">Middle Schools</button>
          <button class="button" onclick="setHighSchool(settings)">High Schools</button> 
-         <button class="button" onclick="resetSchool(settings)">Reset</button> 
+         <button class="button" onclick="resetSchool(settings)">↺</button> 
          </a>
          </div>
-         <div style="padding-top:15px;padding-bottom:10px;font-size:3vh;">
+         <div style="padding-top:15px;padding-bottom:10px;font-size:3vh;position:fixed;bottom:0;width:100%;">
          Map data provided by LA Times' <a href="https://github.com/datadesk/">Data Desk</a>. Available <a href="https://github.com/datadesk/lausd-school-campus-polygons">here</a>.
          </div>
          </center>
