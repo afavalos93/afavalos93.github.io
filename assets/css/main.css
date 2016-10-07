@@ -3890,10 +3890,12 @@
 		background-position: top right;
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
+		text-align:center;
 	}
 
 		#intro p {
 			font-size: 1.25em;
+
 		}
 
 			@media screen and (max-width: 980px) {
@@ -3916,6 +3918,7 @@
 
 			#intro {
 				background-attachment: scroll;
+
 			}
 
 		}
