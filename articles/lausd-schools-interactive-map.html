@@ -1,0 +1,338 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
+        <script src="leaflet.ajax.min.js"></script>
+
+
+        <title>LAUSD Schools Interactive Map</title>
+        <meta name="tags" content="LAUSD, schools, maps, geojson" />
+        <meta name="date" content="2016-09-08 16:30" />
+        <meta name="modified" content="2016-09-08 16:30" />
+        <meta name="category" content="Projects" />
+        <meta name="author" content="Andres Avalos" />
+        <meta name="summary" content="A map of schools with information on grade-levels and education programs." />
+
+        <style>
+        #mapid { height: 72%;
+                 width: 100%; }
+
+        body {  font-family: "Arial";
+                color: white;
+                background-color: #636363;
+                padding-top: 0px;
+                margin:0;
+            }
+        .custom-popup .leaflet-popup-content-wrapper {
+                background:#2c3e50;
+                color:#fff;
+                font-size:16px;
+                line-height:24px;
+            }
+
+        .button {
+                background-color: #1CAF80; /* Green */
+                border: none;
+                border-radius: 7px;
+                color: white;
+                padding: 2px 5px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 3vh;
+                -webkit-transition-duration: 0.4s; /* Safari */
+                transition-duration: 0.4s;
+            }
+
+        .button:hover {
+                background-color: #31E5CD; /* Green */
+                color: white;
+            }
+
+
+        .button:active {
+                box-shadow: 0 5px #666;
+                transform: translateY(2px);
+        }
+
+        a:link    {color:pink; background-color:transparent; text-decoration:none}
+        a:visited {color:pink; background-color:transparent; text-decoration:none}
+        a:hover   {color:orange; background-color:transparent; text-decoration:underline}
+        a:active  {color:pink; background-color:transparent; text-decoration:underline}
+
+
+        </style>
+
+    </head>
+    <body>
+
+         <center>
+         <div style="background-color:#2c3e50;padding-bottom:15px;padding-top:15px;font-size:5.8vh;">
+         Schools in Los Angeles Unified School District
+         </div>
+
+
+         <div class='custom-popup' id="mapid"></div>
+         <div style="background-color:#7F7F7F;padding-top:5px;padding-bottom:5px;font-size:3vh;">
+         <!--CONTROLS FOR MAP GO HERE-->
+         <button class="button" onclick="setElementarySchool(settings)">Elementary Schools</button>
+         <button class="button" onclick="setMiddleSchool(settings)">Middle Schools</button>
+         <button class="button" onclick="setHighSchool(settings)">High Schools</button>
+         <button class="button" onclick="resetSchool(settings)">Reset</button>
+         </a>
+         </div>
+         <div style="padding-top:15px;padding-bottom:10px;font-size:3vh;">
+         Map data provided by LA Times' <a href="https://github.com/datadesk/">Data Desk</a>. Available <a href="https://github.com/datadesk/lausd-school-campus-polygons">here</a>.
+         </div>
+         </center>
+
+         <!--$$$$$$$$$$$$$$$$$$-->
+         <!--SCRIPT BEGINS HERE-->
+         <!--$$$$$$$$$$$$$$$$$$-->
+
+         <script>
+            var settings = "default";
+            var HighLayer;
+            var ElementLayer;
+
+
+            var myStyle = {
+                "color": "#c51b8a",
+                "weight": 0.5,
+                "opacity": 0.90,
+                "stroke": true
+            };
+
+            var mouseStyle = {
+                "color": "#c51b8a",
+                "weight": 2,
+                "opacity": 0.95,
+                "stroke": true
+            };
+
+            var hideStyle = {
+                "opacity": 0,
+                "color" : "#fff"
+            }
+
+
+
+
+            function setHighSchool(settings) {
+
+                if (settings == "ELEM"){
+                        map.removeLayer(ElementLayer);
+                    }
+                else if (settings == "MIDD"){
+                        map.removeLayer(MiddleLayer);
+                }
+                else if (settings == "HIGH"){
+                        return;
+                }
+                else {
+                        map.removeLayer(geojsonLayer);
+
+                    }
+                window.HighLayer = new L.GeoJSON.AJAX("lausd.geojson", {
+                onEachFeature:onEachFeature2,
+                style: myStyle});
+                HighLayer.addTo(map);
+                window.settings = "HIGH";
+                //alert("Settings: "+settings);
+            }
+
+            function setMiddleSchool(settings) {
+
+                if (settings == "HIGH"){
+                        map.removeLayer(HighLayer);
+                    }
+                else if (settings == "ELEM"){
+                        map.removeLayer(ElementLayer);
+                }
+                else if (settings == "MIDD"){
+                        return;
+                    }
+                else {
+                        map.removeLayer(geojsonLayer);
+                    }
+
+                window.MiddleLayer = new L.GeoJSON.AJAX("lausd.geojson", {
+                onEachFeature:onEachFeature4,
+                style: myStyle});
+                MiddleLayer.addTo(map);
+                window.settings = "MIDD";
+                //alert("Settings: "+settings);
+            }
+
+            function setElementarySchool(settings) {
+
+                if (settings == "HIGH"){
+                        map.removeLayer(HighLayer);
+                    }
+                else if (settings == "MIDD"){
+                        map.removeLayer(MiddleLayer);
+                }
+                else if (settings == "ELEM"){
+                        return;
+                    }
+                else {
+                        map.removeLayer(geojsonLayer);
+                    }
+
+                window.ElementLayer = new L.GeoJSON.AJAX("lausd.geojson", {
+                onEachFeature:onEachFeature3,
+                style: myStyle});
+                ElementLayer.addTo(map);
+                window.settings = "ELEM";
+                //alert("Settings: "+settings);
+            }
+
+            function resetSchool(settings) {
+
+                if (settings == "HIGH"){
+                        map.removeLayer(HighLayer);
+                    }
+                else if (settings == "MIDD"){
+                        map.removeLayer(MiddleLayer);
+                }
+                else if (settings == "ELEM"){
+                        map.removeLayer(ElementLayer);
+                    }
+                else {
+                        map.removeLayer(geojsonLayer);
+                    }
+
+                window.geojsonLayer = new L.GeoJSON.AJAX("lausd.geojson", {
+                onEachFeature:onEachFeature,
+                style: myStyle});
+                geojsonLayer.addTo(map);
+                window.settings = "default";
+                //alert("Settings: "+settings);
+            }
+
+            function onEachFeature(feature, layer) {
+                // does this feature have a property named popupContent?
+                if (feature.properties) {
+
+                    if (feature.properties.CONFIG != null) {
+                        layer.bindPopup('<b>' + feature.properties.LABEL + '</b><br>' +
+                            '<br><b>Address</b>: '+ feature.properties.ADDRESS +
+                            '<br><b>City</b>: '+ feature.properties.CITY +
+                            '<br><b>Grades</b>: ' + feature.properties.CONFIG +
+                            '<br><b>Description</b>: ' + feature.properties.MAP_DESC, { autoPan: false}
+                            );
+                    }
+                    else {
+                        layer.bindPopup('<b>' + feature.properties.LABEL + '</b><br>' +
+                            '<br><b>Address</b>: '+ feature.properties.ADDRESS +
+                            '<br><b>City</b>: '+ feature.properties.CITY +
+                            '<br><b>Grades</b>: ' + 'N/A' +
+                            '<br><b>Description</b>: ' + feature.properties.MAP_DESC, { autoPan: false}
+                            );
+                    }
+                }
+                layer.on('mouseover', function (e) {
+                    this.openPopup();
+                    layer.setStyle(mouseStyle);
+                });
+                layer.on('mouseout', function (e) {
+                    this.closePopup();
+                    layer.setStyle(myStyle);
+                });
+            }
+
+            //------HIGH SCHOOLS---
+            function onEachFeature2(feature, layer) {
+                // does this feature have a property named popupContent?
+                if (feature.properties) {
+
+                    if (feature.properties.MAP_DESC.includes("High School") == true) {
+                        layer.bindPopup('<b>' + feature.properties.LABEL + '</b><br>' +
+                            '<br><b>Address</b>: '+ feature.properties.ADDRESS +
+                            '<br><b>City</b>: '+ feature.properties.CITY +
+                            '<br><b>Grades</b>: ' + feature.properties.CONFIG +
+                            '<br><b>Description</b>: ' + feature.properties.MAP_DESC, { autoPan: false}
+                            );
+                        layer.on('mouseover', function (e) {
+                            this.openPopup();
+                            layer.setStyle(mouseStyle);
+                        });
+                        layer.on('mouseout', function (e) {
+                            this.closePopup();
+                            layer.setStyle(myStyle);
+                        });
+                    }
+                    else {
+                        layer.setStyle(hideStyle);
+                    }
+                }
+
+            }
+
+            //------ELEMENTARY SCHOOLS------
+            function onEachFeature3(feature, layer) {
+                // does this feature have a property named popupContent?
+                if (feature.properties) {
+
+                    if (feature.properties.MAP_DESC.includes("Elementary") == true) {
+                        layer.bindPopup('<b>' + feature.properties.LABEL + '</b><br>' +
+                            '<br><b>Address</b>: '+ feature.properties.ADDRESS +
+                            '<br><b>City</b>: '+ feature.properties.CITY +
+                            '<br><b>Grades</b>: ' + feature.properties.CONFIG +
+                            '<br><b>Description</b>: ' + feature.properties.MAP_DESC, { autoPan: false}
+                            );
+                        layer.on('mouseover', function (e) {
+                            this.openPopup();
+                            layer.setStyle(mouseStyle);
+                        });
+                        layer.on('mouseout', function (e) {
+                            this.closePopup();
+                            layer.setStyle(myStyle);
+                        });
+                    }
+                    else {
+                        layer.setStyle(hideStyle);
+                    }
+                }
+
+            }
+
+            function onEachFeature4(feature, layer) {
+                // does this feature have a property named popupContent?
+                if (feature.properties) {
+
+                    if (feature.properties.MAP_DESC.includes("Middle School") == true) {
+                        layer.bindPopup('<b>' + feature.properties.LABEL + '</b><br>' +
+                            '<br><b>Address</b>: '+ feature.properties.ADDRESS +
+                            '<br><b>City</b>: '+ feature.properties.CITY +
+                            '<br><b>Grades</b>: ' + feature.properties.CONFIG +
+                            '<br><b>Description</b>: ' + feature.properties.MAP_DESC, { autoPan: false}
+                            );
+                        layer.on('mouseover', function (e) {
+                            this.openPopup();
+                            layer.setStyle(mouseStyle);
+                        });
+                        layer.on('mouseout', function (e) {
+                            this.closePopup();
+                            layer.setStyle(myStyle);
+                        });
+                    }
+                    else {
+                        layer.setStyle(hideStyle);
+                    }
+                }
+
+            }
+
+            var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>' });
+            var map = L.map('mapid', { scrollWheelZoom: true, center: [34.1126, -118.3997], zoom: 11});
+            map.addLayer(layer);
+            var geojsonLayer = new L.GeoJSON.AJAX("lausd.geojson", {
+                onEachFeature:onEachFeature,
+                style: myStyle});
+            geojsonLayer.addTo(map);
+
+        </script>
+
+    </body>
+</html>
