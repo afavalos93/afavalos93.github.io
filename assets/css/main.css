@@ -3138,7 +3138,7 @@
 			.spotlights > section > .image {
 				width:100%;
 				height: 50vh;
-				min-height: 15em;
+				/*min-height: 15em;*/
 			}
 
 			.spotlights > section > .content {
