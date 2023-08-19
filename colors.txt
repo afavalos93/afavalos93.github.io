@@ -1,5 +1,0 @@
-#24504c - Dark green
-
-#1fa59a - Light green
-
-#fff - Soft Gray
